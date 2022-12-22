@@ -3,7 +3,7 @@
     
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Emergencias Médicas</a>
+        <a class="navbar-brand" href="#">{{$store.state.titulo}}</a>
       </div>
     </nav>
 
