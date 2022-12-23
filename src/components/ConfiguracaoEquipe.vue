@@ -17,12 +17,12 @@
       <div class="col-4 text-center">
         <div class="row">
           <div class="col">
-            <img class="img-fluid" :src="require('@/assets/ambulancias/indefinida.png')">
+            <img class="img-fluid" :src="require(`@/assets/ambulancias/${imgAmbulancia}`)">
           </div>
         </div>
         <div class="row mt-3">
           <div class="col">
-            <button type="button" class="btn btn-primary">Montar equipe</button>
+            <button type="button" class="btn btn-primary" @click="montarEquipe()">Montar equipe</button>
           </div>
         </div>              
       </div>
@@ -32,7 +32,7 @@
 
 <script>
 
-import {mapState} from 'vuex'
+import { mapState} from 'vuex'
 
 export default {
     name: 'ConfiguracaoEquipe',
@@ -41,9 +41,10 @@ export default {
     titulo: 'Configuração da equipe'
   }),
 
-    computed: {
-      
-      ...mapState({
+  computed: {
+    
+    ...mapState({
+      equipe: state => state.equipe,
       enfermeiro: state => state.equipe.enfermeiro,
       socorrista: state => state.equipe.socorrista,
       medico:state => state.equipe.medico,
@@ -52,7 +53,24 @@ export default {
       kitDeReanimacao: state => state.equipe.kitDeReanimacao,
       tituloCustomizadoLocal(state){
         return `${this.titulo} - ${state.equipe.carro}` 
+      },
+    }),
+    imgAmbulancia(){
+      if(this.kitDeReanimacao){
+        return 'uti.png'
       }
-    })}
+      if(this.carro){
+        return 'simples.png'
+      }
+      return 'indefinida.png'
+    }
+  },
+  methods:{
+    montarEquipe(){
+      let equipeMontada = Object.assign({}, this.equipe)
+      this.$store.commit('addEquipesMontadas', equipeMontada)
+      console.log(equipeMontada)
+    }
+  }
 }
 </script>

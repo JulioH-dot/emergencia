@@ -10,8 +10,8 @@ export default createStore({
       carro: '',
       telefone: '',
       kitDeReanimacao: '',
-
     },
+    equipesMont:[],
     enfermeiros: [],
     socorristas: [],
     medicos: [],
@@ -44,6 +44,10 @@ export default createStore({
 
   },
   mutations: {
+    addEquipesMontadas: (state, payload) =>{
+      state.equipesMont.push(payload)
+      state.equipe = {}
+    },
     setItemEquipe:(state, item)=>{
       let t = item.tipo
       let d = item.dados
@@ -57,7 +61,6 @@ export default createStore({
 
     },
     setProfissionais:(state, {enfermeiros, socorristas, medicos})=>{
-      
       state.enfermeiros = enfermeiros
       state.socorristas = socorristas
       state.medicos = medicos
@@ -70,16 +73,19 @@ export default createStore({
     },
   },
   actions: {
-    fetchEquipamentos(context){
-      fetch('http://localhost:3000/equipamentos')
+    fetchDados(context){
+      fetch('http://localhost:3000/tudo')
         .then(response => response.json())
-        .then(dados => context.commit( 'setEquipamentos',dados))
+        .then(({equipamentos, profissionais }) => {
+          if(equipamentos){
+            context.commit( 'setEquipamentos',equipamentos)
+          }
+          if(profissionais){
+            context.commit( 'setProfissionais',profissionais)
+          }
+        })
     },
-    fetchProfissionais(context){
-      fetch('http://localhost:3000/profissionais')
-        .then(response => response.json())
-        .then(dados => context.commit( 'setProfissionais',dados))
-    }
+    
   },
   modules: {
   }
