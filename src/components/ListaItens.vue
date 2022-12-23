@@ -1,15 +1,26 @@
 <template>
     <div>
-       
+        <div v-if=" tipo == 'socorristas'">
+            <select class="form-control form-control-sm" v-model="turno">
+                <option value="" disabled> Selecione um turno</option>
+                <option value="">Todos</option>
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+                <option value="Noite">Noite</option>
+            </select>
+        </div>
         <item v-for="(itens, index) in items" 
-            :key="index" :dados="itens" 
+            :key="index" :dados="itens" :tipo="tipo"
         />
+        <div v-if="tipo == 'socorristas'">
+            Total: {{ totalSocorristasTurno(turno) }}
+        </div>
     </div>
 </template>
 
 <script>
 import Item from '@/components/Item.vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
     name: 'ListaItens',
@@ -19,10 +30,16 @@ export default {
     props: {
         tipo: String
     },
+    data:()=>({
+        turno: ''
+    }),
     computed:{
+        ...mapGetters({
+            turnoSocorristas:  'turnoSocorristas',
+            totalSocorristasTurno: 'totalSocorristasTurno'
+        }),
         ...mapState({
             enfermeiros: state => state.enfermeiros,
-            socorristas: state => state.socorristas,
             medicos: state => state.medicos,
             kitDeReanimacao: state => state.equipamentos.kitsDeReanimacao,
             carro:state => state.equipamentos.carros,
@@ -33,7 +50,7 @@ export default {
                 case 'enfermeiros':
                     return this.enfermeiros
                 case 'socorristas':
-                    return this.socorristas
+                    return this.turnoSocorristas(this.turno)
                 case 'medicos':
                     return this.medicos
                 case 'kit-de-reanimacao':
