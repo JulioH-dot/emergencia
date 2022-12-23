@@ -40,6 +40,8 @@ import Equipamentos from '@/components/Equipamentos.vue'
 import Equipes from '@/components/Equipes.vue'
 import Profissionais from '@/components/Profissionais.vue'
 
+import {mapMutations, mapActions} from 'vuex'
+
 export default {
   components: { 
     ConfiguracaoEquipe,
@@ -50,6 +52,22 @@ export default {
   name: 'Index',
   props: {
     msg: String
+  },
+  methods:{
+    ...mapMutations({
+      setEnfermeiros: 'setEnfermeiros',
+      setSocorristas: 'setSocorristas',
+      setMedicos: 'setMedicos',
+      setEquipamentos: 'setEquipamentos'
+    }),
+    ...mapActions(['fetchEquipamentos', 'fetchProfissionais'])
+  },
+  created(){
+    this.fetchEquipamentos(),
+    this.fetchProfissionais()
+    
+    
+  
   }
 }
 </script>

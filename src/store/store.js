@@ -9,46 +9,16 @@ export default createStore({
       medico: '',
       carro: '',
       telefone: '',
-      kitDeReanimacao: ''
+      kitDeReanimacao: '',
 
     },
-    enfermeiros: [
-      { id: 1, nome: 'João', escala: '12x36'},
-      { id: 2, nome: 'Maria', escala: '12x36'},
-      { id: 3, nome: 'Ana', escala: '24x48'},
-      { id: 4, nome: 'José', escala: '24x48'}
-    ],
-    socorristas: [
-      { id: 1, nome: 'Marcos', turno: 'manhã'},
-      { id: 2, nome: 'Felipe', turno: 'tarde'},
-      { id: 3, nome: 'Cláudia', turno: 'tarde'},
-      { id: 4, nome: 'Michele', turno: 'noite'}
-    ],
-    medicos: [
-      { id: 1, nome: 'André', escala: '12x36'},
-      { id: 2, nome: 'Roberta', escala: '12x36'},
-      { id: 3, nome: 'Carlos', escala: '24x48'},
-      { id: 4, nome: 'Juliana', escala: '24x48'}
-    ],
+    enfermeiros: [],
+    socorristas: [],
+    medicos: [],
     equipamentos: {
-      carros: [
-          { id: 1, placa: 'ABC-0000' },
-          { id: 2, placa: 'BRA1A11' },
-          { id: 3, placa: 'CBA-1111' },
-          { id: 4, placa: 'ARB2B22' }
-      ],
-      telefones: [
-          { id: 1, telefone: '+55 11 98888-8888' },
-          { id: 2, telefone: '+55 11 97777-7777' },
-          { id: 3, telefone: '+55 11 96666-6666' },
-          { id: 4, telefone: '+55 11 95555-5555' }
-      ],
-      kitsDeReanimacao: [
-          { id: 1, kit: 'K0001' },
-          { id: 2, kit: 'K0002' },
-          { id: 3, kit: 'K0003' },
-          { id: 4, kit: 'K0004' }
-      ]
+      carros: [],
+      telefones: [],
+      kitsDeReanimacao: []
     }
   },
   getters: {
@@ -85,9 +55,31 @@ export default createStore({
       if(t == 'telefones') state.equipe.telefone = d.telefone
       if(t == 'kit-de-reanimacao') state.equipe.kitDeReanimacao = d.kit
 
-    }
+    },
+    setProfissionais:(state, {enfermeiros, socorristas, medicos})=>{
+      
+      state.enfermeiros = enfermeiros
+      state.socorristas = socorristas
+      state.medicos = medicos
+      //console.log(payload)
+    },
+    setEquipamentos:(state, {carros, telefones, kitsDeReanimacao})=>{
+      state.equipamentos.carros = carros
+      state.equipamentos.telefones = telefones
+      state.equipamentos.kitsDeReanimacao = kitsDeReanimacao
+    },
   },
   actions: {
+    fetchEquipamentos(context){
+      fetch('http://localhost:3000/equipamentos')
+        .then(response => response.json())
+        .then(dados => context.commit( 'setEquipamentos',dados))
+    },
+    fetchProfissionais(context){
+      fetch('http://localhost:3000/profissionais')
+        .then(response => response.json())
+        .then(dados => context.commit( 'setProfissionais',dados))
+    }
   },
   modules: {
   }
